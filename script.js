@@ -3,7 +3,7 @@
 // @description  Replace the X icon by the legacy Twitter icon.
 // @namespace    http://tampermonkey.net/
 // @author       235711131723
-// @version      1.0.1
+// @version      1.0.2
 // @updateURL    https://raw.githubusercontent.com/235711131723/AntiX/main/script.js
 // @downloadURL  https://raw.githubusercontent.com/235711131723/AntiX/main/script.js
 // @match        https://twitter.com/*
@@ -42,6 +42,25 @@
         });
     }
 
+    // Change favicon
+    console.debug('Setting favicon (onload)...');
+    /**
+     * The base64-encoded legacy favicon (PNG format).
+     * 
+     * Credit : https://icons8.com/icon/13963/twitter
+     */
+    const src = (() => {
+        const payload = 'iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAACXBIWXMAAAsTAAALEwEAmpwYAAAB6UlEQVR4nO2VsWsVQRDGJzPvUIKIYvVEbAULUf+AqIWpBEUJNgr6P2hhJRY2IqhYiDYW4rvZhacQQSRVSKWFhYqFIkhExUDA5Oa7RDSychdFoy9m770r7wfTzc33ze7sHFFDQ0MvzgemKviZDaJ2QRSvxdlXcfZB1G6RX9j+K6Wl2Qh10Y6qJ4qrkuaHo5LvzW9hxXNxCP+EYlYU10TxkhWTFMJQpAGbLjtJs6MRZl1P8T+CHZ5JikOiNhZrIF/+2L6L2kV6GNb1TOyiXeasYWA5x95RN98WZYAdXvxV5A07O0E3Q7LCqLeDa4sjFFdEnXxrlHgBO5xZpdgnUbvB3o6Tn98hKUZjDIjaJar0Au5/3sQOU1HFY07A42y8gRCGRDHDiglR+1aLgeL6qsDOHtXVfRHFdVUykHjsFrWlegzYW+oH0eyYqC3UYOJyXwbo7txm0fwIO3vct7jal0rPbwW3w3pRez9Q94rrNAiS2v7fW7FyvCp+UjQoScd2sbMH4myxwuAtJoq9VCfscSpqKBVzLZ/tq0e1izYrTrOzp5FDN510sGcgzZZmIz+34Mcq0y4OV+jO7MZ6Oh8Pw+xxstyICltFdInVnrDiXP9PLQYfhHy2U9QOlMspxWh5zONhOOr7hoYG+j8/APk7LxQ9Q41nAAAAAElFTkSuQmCC';
+        return `data:image/png;base64,${payload}`;
+    })();
+    const head = document.querySelector('head');
+    console.debug(head);
+    const link = document.createElement('link');
+    link.setAttribute('rel', 'shortcut icon');
+    link.setAttribute('href', src);
+    head.appendChild(link);
+
+    // Replace the top-left corner icon
     waitForElement('header').then(header => {
         console.debug('Getting the container...');
 
