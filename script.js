@@ -3,7 +3,7 @@
 // @description  Replace the X icon by the legacy Twitter icon.
 // @namespace    http://tampermonkey.net/
 // @author       235711131723
-// @version      1.0.3
+// @version      1.0.4
 // @updateURL    https://raw.githubusercontent.com/235711131723/AntiX/main/script.js
 // @downloadURL  https://raw.githubusercontent.com/235711131723/AntiX/main/script.js
 // @match        https://twitter.com/*
@@ -111,9 +111,32 @@
                 })
             });
         }
+
+        /**
+         * Change the loading icon.
+         * 
+         * @param {string} url The URL pointing to the new icon source.
+         */
+        setLoadingIcon(url) {
+            console.debug('Changing loading icon...');
+
+            this.waitForElement('#placeholder').then(div => {
+                // FIXME: Can't remove the X icon in the first frames
+                // Remove the old icon
+                div.innerHTML = '';
+            
+                const image = new Image(300, 300);
+                image.src = url;
+                image.style.margin = 'auto';
+                image.style.display = 'block';
+
+                div.appendChild(image);
+            });
+        }
     }
 
     const antiX = new AntiX();
+    antiX.setLoadingIcon(logo);
     antiX.setFavicon(favicon);
     antiX.setIcon(logo);
 })();
