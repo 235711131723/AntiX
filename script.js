@@ -161,26 +161,13 @@
          */
         fixContinouslyTitle() {
             this.waitForElement('title', document.head).then(element => {
-                const observer = new MutationObserver(mutations => {
-                    // Restrict mutations
-                    // to avoid crash on Firefox
-                    for (const mutation of mutations) {
-                        if (mutation.addedNodes.length !== 0) {
-                            for (const node of mutation.addedNodes) {
-                                // Title is changed
-                                if (node.nodeName === '#text') {
-                                    this.fixTitle(element);
+                const main = document.body.querySelector('main');
 
-                                    // Stop observer
-                                    observer.disconnect();
-                                    break;
-                                }
-                            }
-                        }
-                    }
+                const observer = new MutationObserver(mutations => {
+                    this.fixTitle(element);
                 });
 
-                observer.observe(document.head, {
+                observer.observe(main, {
                     childList: true,
                     subtree: true
                 });
