@@ -3,7 +3,7 @@
 // @description  Replace the X icon by the legacy Twitter icon.
 // @namespace    http://tampermonkey.net/
 // @author       235711131723
-// @version      1.0.6
+// @version      1.0.7
 // @updateURL    https://raw.githubusercontent.com/235711131723/AntiX/main/script.js
 // @downloadURL  https://raw.githubusercontent.com/235711131723/AntiX/main/script.js
 // @match        https://twitter.com/*
@@ -161,26 +161,13 @@
          */
         fixContinouslyTitle() {
             this.waitForElement('title', document.head).then(element => {
-                const observer = new MutationObserver(mutations => {
-                    // Restrict mutations
-                    // to avoid crash on Firefox
-                    for (const mutation of mutations) {
-                        if (mutation.addedNodes.length !== 0) {
-                            for (const node of mutation.addedNodes) {
-                                // Title is changed
-                                if (node.nodeName === '#text') {
-                                    this.fixTitle(element);
+                const main = document.body.querySelector('main');
 
-                                    // Stop observer
-                                    observer.disconnect();
-                                    break;
-                                }
-                            }
-                        }
-                    }
+                const observer = new MutationObserver(mutations => {
+                    this.fixTitle(element);
                 });
 
-                observer.observe(document.head, {
+                observer.observe(main, {
                     childList: true,
                     subtree: true
                 });
