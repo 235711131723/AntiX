@@ -3,7 +3,7 @@
 // @description  Replace the X icon by the legacy Twitter icon.
 // @namespace    http://tampermonkey.net/
 // @author       235711131723
-// @version      1.0.4
+// @version      1.0.5
 // @updateURL    https://raw.githubusercontent.com/235711131723/AntiX/main/script.js
 // @downloadURL  https://raw.githubusercontent.com/235711131723/AntiX/main/script.js
 // @match        https://twitter.com/*
@@ -73,12 +73,13 @@
          */
         setFavicon(url) {
             console.debug('Setting favicon (onload)...');
-            const head = document.querySelector('head');
-
-            const link = document.createElement('link');
-            link.setAttribute('rel', 'shortcut icon');
-            link.setAttribute('href', url);
-            head.appendChild(link);
+            let link = document.querySelector("link[rel~='icon']");
+            if (!link) {
+                link = document.createElement('link');
+                link.rel = 'icon';
+                document.head.appendChild(link);
+            }
+            link.href = favicon;
         }
 
         /**
