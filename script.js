@@ -3,7 +3,7 @@
 // @description  Replace the X icon by the legacy Twitter icon.
 // @namespace    http://tampermonkey.net/
 // @author       235711131723
-// @version      1.0.5
+// @version      1.0.6
 // @updateURL    https://raw.githubusercontent.com/235711131723/AntiX/main/script.js
 // @downloadURL  https://raw.githubusercontent.com/235711131723/AntiX/main/script.js
 // @match        https://twitter.com/*
@@ -134,10 +134,63 @@
                 div.appendChild(image);
             });
         }
+
+        /**
+         * Replace 'X' by 'Twitter in the title.
+         * 
+         * @param {HTMLElement} element The <title> element.
+         */
+        fixTitle(element) {
+            const pattern = /(.+)(\s*\/\s*)X/;
+
+            /**
+             * @type string
+             */
+            const title = element.textContent;
+
+            /**
+             * @type string
+             */
+            const newTitle = title.replace(pattern, '$1$2Twitter');
+            element.textContent = newTitle;
+        }
+
+        /**
+         * Monitor the <title> element in <head>
+         * to replace the X title by Twitter
+         */
+        fixContinouslyTitle() {
+            this.waitForElement('title', document.head).then(element => {
+                const observer = new MutationObserver(mutations => {
+                    // Restrict mutations
+                    // to avoid crash on Firefox
+                    for (const mutation of mutations) {
+                        if (mutation.addedNodes.length !== 0) {
+                            for (const node of mutation.addedNodes) {
+                                // Title is changed
+                                if (node.nodeName === '#text') {
+                                    this.fixTitle(element);
+
+                                    // Stop observer
+                                    observer.disconnect();
+                                    break;
+                                }
+                            }
+                        }
+                    }
+                });
+
+                observer.observe(document.head, {
+                    childList: true,
+                    subtree: true
+                });
+            });
+        }
     }
 
     const antiX = new AntiX();
     antiX.setLoadingIcon(logo);
     antiX.setFavicon(favicon);
     antiX.setIcon(logo);
+    antiX.fixContinouslyTitle();
 })();
