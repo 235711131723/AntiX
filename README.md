@@ -1,8 +1,12 @@
 # AntiX
 
-## Presentation
-
 A (very) simple script to restore legacy Twitter icon and favicon.
+
+## Features
+
+- [x] Title
+- [x] Favicon
+- [x] Logo (at the top-left corner)
 
 ## Requirements
 
