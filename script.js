@@ -73,12 +73,13 @@
          */
         setFavicon(url) {
             console.debug('Setting favicon (onload)...');
-            const head = document.querySelector('head');
-
-            const link = document.createElement('link');
-            link.setAttribute('rel', 'shortcut icon');
-            link.setAttribute('href', url);
-            head.appendChild(link);
+            let link = document.querySelector("link[rel~='icon']");
+            if (!link) {
+                link = document.createElement('link');
+                link.rel = 'icon';
+                document.head.appendChild(link);
+            }
+            link.href = favicon;
         }
 
         /**
