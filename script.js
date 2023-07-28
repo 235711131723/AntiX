@@ -136,24 +136,48 @@
         }
 
         /**
+         * Replace 'X' by 'Twitter in the title.
+         * 
+         * @param {HTMLElement} element The <title> element.
+         */
+        fixTitle(element) {
+            const pattern = /(.+)(\s*\/\s*)X/;
+
+            /**
+             * @type string
+             */
+            const title = element.textContent;
+
+            /**
+             * @type string
+             */
+            const newTitle = title.replace(pattern, '$1$2Twitter');
+            element.textContent = newTitle;
+        }
+
+        /**
          * Monitor the <title> element in <head>
          * to replace the X title by Twitter
          */
         fixContinouslyTitle() {
             this.waitForElement('title', document.head).then(element => {
                 const observer = new MutationObserver(mutations => {
-                    const pattern = /(.+)(\s*\/\s*)X/;
+                    // Restrict mutations
+                    // to avoid crash on Firefox
+                    for (const mutation of mutations) {
+                        if (mutation.addedNodes.length !== 0) {
+                            for (const node of mutation.addedNodes) {
+                                // Title is changed
+                                if (node.nodeName === '#text') {
+                                    this.fixTitle(element);
 
-                    /**
-                     * @type string
-                     */
-                    const title = element.textContent;
-
-                    /**
-                     * @type string
-                     */
-                    const newTitle = title.replace(pattern, '$1$2Twitter');
-                    element.textContent = newTitle;
+                                    // Stop observer
+                                    observer.disconnect();
+                                    break;
+                                }
+                            }
+                        }
+                    }
                 });
 
                 observer.observe(document.head, {
