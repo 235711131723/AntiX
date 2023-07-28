@@ -134,10 +134,39 @@
                 div.appendChild(image);
             });
         }
+
+        /**
+         * Monitor the <title> element in <head>
+         * to replace the X title by Twitter
+         */
+        fixContinouslyTitle() {
+            this.waitForElement('title', document.head).then(element => {
+                const observer = new MutationObserver(mutations => {
+                    const pattern = /(.+)(\s*\/\s*)X/;
+
+                    /**
+                     * @type string
+                     */
+                    const title = element.textContent;
+
+                    /**
+                     * @type string
+                     */
+                    const newTitle = title.replace(pattern, '$1$2Twitter');
+                    element.textContent = newTitle;
+                });
+
+                observer.observe(document.head, {
+                    childList: true,
+                    subtree: true
+                });
+            });
+        }
     }
 
     const antiX = new AntiX();
     antiX.setLoadingIcon(logo);
     antiX.setFavicon(favicon);
     antiX.setIcon(logo);
+    antiX.fixContinouslyTitle();
 })();
