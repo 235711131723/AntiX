@@ -3,7 +3,7 @@
 // @description  Replace the X icon by the legacy Twitter icon.
 // @namespace    http://tampermonkey.net/
 // @author       235711131723
-// @version      1.0.7
+// @version      1.0.8
 // @updateURL    https://raw.githubusercontent.com/235711131723/AntiX/main/script.js
 // @downloadURL  https://raw.githubusercontent.com/235711131723/AntiX/main/script.js
 // @match        https://twitter.com/*
@@ -95,7 +95,7 @@
                 // Get the header to access later to SVG icons
                 // Get the div that contains the fucking ugly shit X icon
                 // REVIEW: Find a better way to point to the div
-                this.waitForElement('div.css-901oao.r-1awozwy.r-6koalj.r-18u37iz.r-16y2uox.r-37j5jr.r-a023e6.r-b88u0q.r-1777fci.r-rjixqe.r-bcqeeo.r-q4m81j.r-qvutc0', header).then(div => {
+                this.waitForElement('div.css-1rynq56.r-bcqeeo.r-qvutc0.r-37j5jr.r-q4m81j.r-a023e6.r-rjixqe.r-b88u0q.r-1awozwy.r-6koalj.r-18u37iz.r-16y2uox.r-1777fci', header).then(div => {
                     console.debug('Emptying the container...');
 
                     // Remove everything inside it
